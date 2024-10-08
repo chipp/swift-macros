@@ -9,14 +9,36 @@ let package = Package(
     platforms: [.macOS(.v14), .iOS(.v17)],
     products: [
         .library(
-            name: "Macros",
-            targets: ["Macros"]
+            name: "HasLoggerMacro",
+            targets: ["HasLoggerMacro"]
+        ),
+        .library(
+            name: "URLMacro",
+            targets: ["URLMacro"]
         )
     ],
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0-latest"),
+        .package(url: "https://github.com/chipp/BuildPlugins.git", branch: "main")
     ],
     targets: [
+        .target(
+            name: "HasLoggerMacro",
+            dependencies: ["MacrosImplementation"],
+            plugins: [
+                .plugin(name: "SwiftLint", package: "BuildPlugins"),
+                .plugin(name: "SwiftFormat", package: "BuildPlugins")
+            ]
+        ),
+        .target(
+            name: "URLMacro",
+            dependencies: ["MacrosImplementation"],
+            plugins: [
+                .plugin(name: "SwiftLint", package: "BuildPlugins"),
+                .plugin(name: "SwiftFormat", package: "BuildPlugins")
+            ]
+        ),
+
         .macro(
             name: "MacrosImplementation",
             dependencies: [
@@ -24,16 +46,8 @@ let package = Package(
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ],
             plugins: [
-//                .plugin(name: "SwiftLint", package: "BuildTools"),
-//                .plugin(name: "SwiftFormat", package: "BuildTools")
-            ]
-        ),
-        .target(
-            name: "Macros",
-            dependencies: ["MacrosImplementation"],
-            plugins: [
-//                .plugin(name: "SwiftLint", package: "BuildTools"),
-//                .plugin(name: "SwiftFormat", package: "BuildTools")
+                .plugin(name: "SwiftLint", package: "BuildPlugins"),
+                .plugin(name: "SwiftFormat", package: "BuildPlugins")
             ]
         ),
         .testTarget(
@@ -43,8 +57,8 @@ let package = Package(
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
             ],
             plugins: [
-//                .plugin(name: "SwiftLint", package: "BuildTools"),
-//                .plugin(name: "SwiftFormat", package: "BuildTools")
+                .plugin(name: "SwiftLint", package: "BuildPlugins"),
+                .plugin(name: "SwiftFormat", package: "BuildPlugins")
             ]
         ),
     ]

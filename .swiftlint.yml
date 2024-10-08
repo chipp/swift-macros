@@ -1,0 +1,4 @@
+line_length:
+    warning: 130
+opening_brace:
+    ignore_multiline_statement_conditions: true

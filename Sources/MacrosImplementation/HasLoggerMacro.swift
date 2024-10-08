@@ -10,10 +10,10 @@ public enum HasLoggerMacroError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-            case .cannotExtractModuleName:
-                #"Cannot extract module name from file path. Specify subsystem name manually @HasLogger(subsystem: "MyModule")"#
-            case .invalidArgumentType:
-                #"Subsystem and category should be provided as strings: @HasLogger(subsystem: "MyModule", category: "MyClass")"#
+        case .cannotExtractModuleName:
+            #"Cannot extract module name from file path. Specify subsystem name manually @HasLogger(subsystem: "MyModule")"#
+        case .invalidArgumentType:
+            #"Subsystem and category should be provided as strings: @HasLogger(subsystem: "MyModule", category: "MyClass")"#
         }
     }
 }
@@ -26,7 +26,7 @@ public struct HasLoggerMacro: ExtensionMacro {
         of node: AttributeSyntax,
         attachedTo declaration: some DeclGroupSyntax,
         providingExtensionsOf type: some TypeSyntaxProtocol,
-        conformingTo protocols: [TypeSyntax],
+        conformingTo _: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
         let (subsystem, category) = try handleOptionalArgs(
@@ -65,20 +65,20 @@ public struct HasLoggerMacro: ExtensionMacro {
             }
 
             switch label.text {
-                case "subsystem":
-                    guard let value = labeled.expression.as(StringLiteralExprSyntax.self) else {
-                        throw HasLoggerMacroError.invalidArgumentType(labeled.expression.syntaxNodeType)
-                    }
+            case "subsystem":
+                guard let value = labeled.expression.as(StringLiteralExprSyntax.self) else {
+                    throw HasLoggerMacroError.invalidArgumentType(labeled.expression.syntaxNodeType)
+                }
 
-                    subsystem = value
-                case "category":
-                    guard let value = labeled.expression.as(StringLiteralExprSyntax.self) else {
-                        throw HasLoggerMacroError.invalidArgumentType(labeled.expression.syntaxNodeType)
-                    }
+                subsystem = value
+            case "category":
+                guard let value = labeled.expression.as(StringLiteralExprSyntax.self) else {
+                    throw HasLoggerMacroError.invalidArgumentType(labeled.expression.syntaxNodeType)
+                }
 
-                    category = value
-                default:
-                    continue
+                category = value
+            default:
+                continue
             }
         }
 
@@ -92,17 +92,17 @@ public struct HasLoggerMacro: ExtensionMacro {
         context: some MacroExpansionContext
     ) throws -> Args {
         switch values {
-            case let (.some(subsystem), .some(category)):
-                (subsystem, category)
-            case let (.some(subsystem), nil):
-                (subsystem, defaultCategory(type: type))
-            case let (nil, .some(category)):
-                try (defaultSubsystem(declaration: declaration, context: context), category)
-            case (nil, nil):
-                try (
-                    defaultSubsystem(declaration: declaration, context: context),
-                    defaultCategory(type: type)
-                )
+        case let (.some(subsystem), .some(category)):
+            (subsystem, category)
+        case let (.some(subsystem), nil):
+            (subsystem, defaultCategory(type: type))
+        case let (nil, .some(category)):
+            try (defaultSubsystem(declaration: declaration, context: context), category)
+        case (nil, nil):
+            try (
+                defaultSubsystem(declaration: declaration, context: context),
+                defaultCategory(type: type)
+            )
         }
     }
 
