@@ -24,7 +24,7 @@ public enum URLMacroError: CustomStringConvertible, LocalizedError {
 public struct URLMacro: ExpressionMacro {
     public static func expansion(
         of node: some FreestandingMacroExpansionSyntax,
-        in context: some MacroExpansionContext
+        in _: some MacroExpansionContext
     ) throws -> ExprSyntax {
         guard let argument = node.arguments.first?.expression,
               let segments = argument.as(StringLiteralExprSyntax.self)?.segments,

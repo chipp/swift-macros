@@ -1,5 +1,5 @@
 {
-  "originHash" : "d5a3a0ac46b9dd5a250ca948433451852ed489a0e3bc8e831b419235a575b869",
+  "originHash" : "60298268d1a8b87af2076d7c9d5f1f73eef6d8ae02b061f98be6db59bfe6751c",
   "pins" : [
     {
       "identity" : "buildplugins",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/chipp/BuildPlugins",
       "state" : {
         "branch" : "main",
-        "revision" : "b6b1a6b2cdfb363e53e812f8ce360f6611c6dac3"
+        "revision" : "327b997d0fb68c1e779e7963f3a0affbfff0982e"
       }
     },
     {
